@@ -1,0 +1,37 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        fahrenheitChannelBindingInput:
+          destination: TEMPS.F
+          binder: solace
+          group: SINK
+        fahrenheitChannelBindingOutput:
+          destination: sensor/temperature/fahrenheit
+          binder: solace
+        celsiusChannelBindingInput:
+          destination: TEMPS.C
+          binder: solace
+          group: SINK
+        celsiusChannelBindingOutput:
+          destination: sensor/temperature/celsius
+          binder: solace
+      binders:
+        solace:
+          environment:
+            solace:
+              java:
+                host:
+                msgVpn:
+                clientUsername:
+                clientPassword:
+      solace:
+        bindings:
+          fahrenheitChannelBindingInput:
+            consumer:
+              queueAdditionalSubscriptions:
+                sensor/temperature/fahrenheit
+          celsiusChannelBindingInput:
+            consumer:
+              queueAdditionalSubscriptions:
+                sensor/temperature/celsius

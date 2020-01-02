@@ -1,0 +1,53 @@
+# vim: set ts=2 sw=2 sts=2 expandtab :
+---
+components:
+  schemas:
+    TempReading:
+      title: TempReading
+      type: object
+      properties:
+        sensorId:
+          type: string
+        temperature:
+          type: number
+        baseUnit:
+          enum: [
+            CELSIUS,
+            FAHRENHEIT
+          ]
+  messages:
+    TempReadingMessage:
+      name: tempReadingMessage
+      payload:
+        $ref: "#/components/schemas/TempReading"
+channels:
+  sensor/temperature/fahrenheit:
+    x-java-class: FahrenheitChannel
+    x-scs-queue: TEMPS.F
+    x-scs-consumer-group: SINK
+    publish:
+      message:
+        $ref: "#/components/messages/TempReadingMessage"
+    subscribe:
+      message:
+        $ref: "#/components/messages/TempReadingMessage"
+  sensor/temperature/celsius:
+    x-java-class: CelsiusChannel
+    x-scs-queue: TEMPS.C
+    x-scs-consumer-group: SINK
+    publish:
+      message:
+        $ref: "#/components/messages/TempReadingMessage"
+    subscribe:
+      message:
+        $ref: "#/components/messages/TempReadingMessage"
+asyncapi: "2.0.0"
+id: "urn:com:solace"
+info:
+  description: "Temperature Readings"
+  title: "Temperature Readings"
+  version: "1.0.0"
+  x-java-package: "com.solace.scs.gen"
+  x-spring-cloud-stream-version: "3.0.1.RELEASE"
+  x-artifact-id: "scs-temp"
+  x-group-id: "com.solace"
